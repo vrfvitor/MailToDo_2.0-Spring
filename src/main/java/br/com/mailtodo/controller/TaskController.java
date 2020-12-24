@@ -1,27 +1,25 @@
 package br.com.mailtodo.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.mailtodo.model.Priority;
 import br.com.mailtodo.model.Task;
+import br.com.mailtodo.repository.TaskRepository;
 
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
+	
+	@Autowired
+	private TaskRepository taskRepository;
 
 	@GetMapping
 	public List<Task> index() {
-		ArrayList<Task> list = new ArrayList<Task>();
-
-		list.add(new Task("Sopa", "Macaco", Priority.HIGH));
-		list.add(new Task("Feijão", "Arroz", Priority.LOW));
-
-		return list;
+		return taskRepository.findAll();
 	}
 
 }

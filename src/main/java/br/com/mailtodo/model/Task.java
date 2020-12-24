@@ -19,12 +19,6 @@ public class Task {
 
 	@Enumerated(EnumType.STRING)
 	private Priority priority;
-	
-	public Task(String title, String description, Priority priority) {
-		this.title = title;
-		this.description = description;
-		this.priority = priority;
-	}
 
 	public Integer getId() {
 		return id;
@@ -33,11 +27,11 @@ public class Task {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	public boolean isDone() {
 		return done;
 	}
-	
+
 	public void setDone(boolean done) {
 		this.done = done;
 	}
