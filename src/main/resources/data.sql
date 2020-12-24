@@ -1,2 +1,3 @@
 INSERT INTO Task (id, done, title, description, priority) VALUES (1, false, 'Enter Your Email', 'In the field above you can enter your email. Once you submit it, we will send emails periodically if there are High Priority Tasks you haven''t done yet!', 'HIGH');
 INSERT INTO Task (id, done, title, description, priority) VALUES (2, false, 'Sample Task', 'Clicking in options you''ll be able to update or delete the Task. Once it''s done you can click ''Done!'' and off it goes!', 'MEDIUM');
+ALTER SEQUENCE task_id_seq RESTART WITH 3
