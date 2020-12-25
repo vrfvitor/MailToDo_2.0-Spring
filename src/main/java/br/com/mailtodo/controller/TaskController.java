@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import br.com.mailtodo.dto.TaskForm;
 import br.com.mailtodo.model.Task;
 import br.com.mailtodo.repository.TaskRepository;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
