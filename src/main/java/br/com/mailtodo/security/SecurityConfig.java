@@ -12,6 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import br.com.mailtodo.repository.UserRepository;
+import br.com.mailtodo.security.token.AuthViaTokenFilter;
+import br.com.mailtodo.security.token.TokenService;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +24,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AuthService authService;
+
+	@Autowired
+	private TokenService tokenService;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -33,8 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated()
 			.and().cors()
 			.and().csrf().disable()
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.addFilterBefore(new AuthViaTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class)
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	@Override
