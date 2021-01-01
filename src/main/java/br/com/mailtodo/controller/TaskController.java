@@ -7,7 +7,9 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.mailtodo.dto.TaskForm;
 import br.com.mailtodo.model.Task;
+import br.com.mailtodo.model.User;
 import br.com.mailtodo.repository.TaskRepository;
 
 @RestController
@@ -31,14 +34,19 @@ public class TaskController {
 
 	@GetMapping
 	public List<Task> index() {
-		return taskRepository.findAll();
+		return taskRepository.findByOwner(getLoggedUser());
 	}
 
 	@GetMapping("{id}")
 	public ResponseEntity<Task> show(@PathVariable("id") Integer id) {
-		Optional<Task> optionalTask = taskRepository.findById(id);
-		if (optionalTask.isPresent()) {
-			return ResponseEntity.ok(optionalTask.get());
+		Optional<Task> oTask = taskRepository.findById(id);
+		if (oTask.isPresent()) {
+			Task task = oTask.get();
+
+			if (!isLoggedUserOwnerOf(task))
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+			return ResponseEntity.ok(task);
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -48,6 +56,7 @@ public class TaskController {
 	public ResponseEntity<Task> create(@RequestBody TaskForm form, UriComponentsBuilder uriBuilder) {
 		Task task = new Task();
 		form.transferDataTo(task);
+		task.setOwner(getLoggedUser());
 		taskRepository.save(task);
 		URI uri = uriBuilder.path("/tasks/{id}").buildAndExpand(task.getId()).toUri();
 		return ResponseEntity.created(uri).body(task);
@@ -56,9 +65,13 @@ public class TaskController {
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<Task> update(@PathVariable("id") Integer id, @RequestBody TaskForm form) {
-		Optional<Task> optional = taskRepository.findById(id);
-		if (optional.isPresent()) {
-			Task task = optional.get();
+		Optional<Task> oTask = taskRepository.findById(id);
+		if (oTask.isPresent()) {
+			Task task = oTask.get();
+
+			if (!isLoggedUserOwnerOf(task))
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
 			form.transferDataTo(task);
 			taskRepository.save(task);
 			return ResponseEntity.ok(task);
@@ -69,9 +82,13 @@ public class TaskController {
 	@PutMapping("/{id}/{done}")
 	@Transactional
 	public ResponseEntity<Task> setDone(@PathVariable("id") Integer id, @PathVariable("done") boolean done) {
-		Optional<Task> optional = taskRepository.findById(id);
-		if (optional.isPresent()) {
-			Task task = optional.get();
+		Optional<Task> oTask = taskRepository.findById(id);
+		if (oTask.isPresent()) {
+			Task task = oTask.get();
+
+			if (!isLoggedUserOwnerOf(task))
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
 			task.setDone(done);
 			return ResponseEntity.ok(task);
 		}
@@ -81,12 +98,27 @@ public class TaskController {
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<Task> delete(@PathVariable("id") Integer id) {
-		Optional<Task> optional = taskRepository.findById(id);
-		if (optional.isPresent()) {
-			taskRepository.delete(optional.get());
+		Optional<Task> oTask = taskRepository.findById(id);
+
+		if (oTask.isPresent()) {
+			Task task = oTask.get();
+
+			if (!isLoggedUserOwnerOf(task))
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+			taskRepository.delete(task);
 			return ResponseEntity.noContent().build();
 		}
+
 		return ResponseEntity.notFound().build();
+	}
+
+	private boolean isLoggedUserOwnerOf(Task task) {
+		return task.getOwner().equals(getLoggedUser());
+	}
+
+	private User getLoggedUser() {
+		return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
 }

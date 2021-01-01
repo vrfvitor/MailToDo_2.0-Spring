@@ -3,9 +3,17 @@ package br.com.mailtodo.model;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Task {
@@ -19,6 +27,12 @@ public class Task {
 
 	@Enumerated(EnumType.STRING)
 	private Priority priority;
+
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "owner_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	private User owner;
 
 	public Integer getId() {
 		return id;
@@ -58,6 +72,14 @@ public class Task {
 
 	public void setPriority(Priority priority) {
 		this.priority = priority;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 }
