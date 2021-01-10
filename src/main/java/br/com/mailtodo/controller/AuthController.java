@@ -1,5 +1,7 @@
 package br.com.mailtodo.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class AuthController {
 	private TokenService tokenService;
 
 	@PostMapping
-	public ResponseEntity<?> login(@RequestBody LoginForm form) {
+	public ResponseEntity<?> login(@RequestBody LoginForm form) throws IOException {
 		UsernamePasswordAuthenticationToken userCredentials = form.converter();
 
 		try {

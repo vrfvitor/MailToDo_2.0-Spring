@@ -11,6 +11,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import br.com.mailtodo.model.User;
 import br.com.mailtodo.repository.UserRepository;
 
@@ -50,8 +53,10 @@ public class AuthViaTokenFilter extends OncePerRequestFilter {
 	 * is to notify SpringSecurity telling it who the user is
 	 * 
 	 * @param token
+	 * @throws JsonProcessingException 
+	 * @throws JsonMappingException 
 	 */
-	private void forceAuthentication(String token) {
+	private void forceAuthentication(String token) throws JsonMappingException, JsonProcessingException {
 		User tokenOwner = userRepository.findById(tokenService.getUserId(token)).get();
 		UsernamePasswordAuthenticationToken tokenOwnerUser = new UsernamePasswordAuthenticationToken(tokenOwner, null,
 				tokenOwner.getAuthorities());
