@@ -2,11 +2,13 @@ package br.com.mailtodo.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,9 @@ public class User implements UserDetails {
 	private String name;
 	private String email;
 	private String password;
+
+	@OneToMany(mappedBy = "owner")
+	private List<Task> tasks;
 
 	public Integer getId() {
 		return id;
@@ -52,6 +57,14 @@ public class User implements UserDetails {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
 	}
 
 	@Override
