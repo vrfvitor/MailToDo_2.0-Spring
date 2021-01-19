@@ -34,6 +34,16 @@ public class Task {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User owner;
 
+	public Task() {
+	}
+
+	public Task(String title, String description, Priority priority, User owner) {
+		this.title = title;
+		this.description = description;
+		this.priority = priority;
+		this.owner = owner;
+	}
+
 	public Integer getId() {
 		return id;
 	}

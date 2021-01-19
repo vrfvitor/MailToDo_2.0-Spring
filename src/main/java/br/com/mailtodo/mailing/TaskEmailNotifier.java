@@ -1,7 +1,6 @@
 package br.com.mailtodo.mailing;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import br.com.mailtodo.model.Priority;
-import br.com.mailtodo.model.Task;
 import br.com.mailtodo.model.User;
 import br.com.mailtodo.repository.UserRepository;
 
@@ -34,10 +32,7 @@ public class TaskEmailNotifier {
 		List<User> usersWithHighPriorityTasksUndone = userRepository.findByHasTaskWithStatus(false, Priority.HIGH);
 
 		usersWithHighPriorityTasksUndone.stream().forEach(user -> {
-			List<Task> tasks = user.getTasks().stream().filter(t -> t.getPriority() == Priority.HIGH)
-					.filter(t -> t.isDone() == false).collect(Collectors.toList());
-
-			String taskEmailContent = htmlMailContentBuilder.buildTaskEmailContent(tasks);
+			String taskEmailContent = htmlMailContentBuilder.buildTaskEmailContent(user.getTasks());
 			emailSender.sendMessage(user.getEmail(), HIGH_TASK_UNDONE, taskEmailContent, true);
 		});
 
