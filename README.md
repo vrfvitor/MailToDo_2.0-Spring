@@ -65,5 +65,5 @@ O projeto é a continuação do [MailToDo](https://github.com/vrfvitor/MailToDo-
           <a href="https://opensource.org/licenses/MIT">The MIT License</a>
 </p>
 
-<p align="center">Copyright :copyright: 2020 - MailToDo</p>
+<p align="center">Copyright :copyright: 2021 - MailToDo++</p>
 
