@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/static/v1?label=Spring-Boot&message=2&color=green&style=for-the-badge&logo=Spring"/>
-  <img src="https://img.shields.io/static/v1?label=Angular&message=10&color=red&style=for-the-badge&logo=Angular"/>
+  <img src="https://img.shields.io/static/v1?label=Angular&message=11&color=red&style=for-the-badge&logo=Angular"/>
   <img src="http://img.shields.io/static/v1?label=License&message=MIT&color=informational&style=for-the-badge"/>
 </p>
 
@@ -18,10 +18,13 @@ As tarefas devem conter um título, uma prioridade e uma descrição. Além diss
 O projeto é a continuação do [MailToDo](https://github.com/vrfvitor/MailToDo-JEE_Angular) porém com o backend todo reformulado, deixando de ser em Java EE (JAX-RS) para se tornar um projeto Spring Boot, onde fiz também a implementação de toda a parte de segurança, registro e autenticação com o Spring Security e utilização de JWT, pela natureza stateless da API REST.
 
 ## Layout da Aplicação :art:
-<p float="left">
+<p align="center">
   <img  src="/media/mtd_auth.gif" alt="MailToDo++ Preview Auth">
-  <img  src="/media/mtd_main.gif"  alt="MailToDo++ Preview Core">
+  <img  src="/media/mtd_main.gif"  alt="MailToDo++ Preview em Computador">
   <img  src="/media/email.png" width="600" height="328" alt="MailToDo++ Preview Sent Email">
+</p>
+<p align="center">
+  <img  src="/media/mtd_mobile.gif"  alt="MailToDo++ Preview em Smartphone">
 </p>
 
 ## Funcionalidades :gear:
